@@ -22,15 +22,12 @@ function playRound(playerSelection, computerSelection) {
 
         return "Draw, nobody wins!";
 
-    } else if (playerSelection === list[1] && computerSelection === list[2]) {
+    } else if ((playerSelection === list[0] && computerSelection === list[2]) || (playerSelection === list[1] && computerSelection === list[0]) || (playerSelection === list[2] && computerSelection === list[1])) {
 
-        return "";
+        return "You won!";
 
-    } else if (playerSelection === list[0] && computerSelection === list[2]) {
+    } else {
 
-        return "";
-
+        return "You loose!";
     }
-
-
-}       
+}
