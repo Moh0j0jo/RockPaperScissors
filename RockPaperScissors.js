@@ -1,72 +1,138 @@
-const list = ["rock", "paper", "scissors"]
-const min = 0
-const max = 2
-
-
-let playerScore = 0
-let computerScore = 0
-
-
-function randomListI(max) {
-    return Math.floor(Math.random() * (max + 1));
-}
 
 function computerSelection() {
-    computerHand = list[randomListI(min, max)]
-    console.log("Computer choose: " + computerHand)
-    return computerHand
-}
 
-function playerSelection() {
-    let playerHandID = parseInt(prompt(" Please Choose 0 - Rock, 1 - Paper, 2 - Scissors !"))
-    playerHand = list[playerHandID]
-    console.log("Player choose: " + playerHand)
-    return playerHand
-}
+    let rock = "Rock";
+    let paper = "Paper";
+    let scissors = "Scissors";
+    let getRandomValue = Math.random();
 
-function checkScores(playerScore, computerScore) {
-
-    if (playerScore > computerScore) {
-
-        console.log("You win! Your Score: " + playerScore + " Computer Score: " + computerScore);
-
-    } else if (playerScore < computerScore) {
-
-        console.log("You Loose! Your Score: " + playerScore + " Computer Score: " + computerScore);
-    }
-}
-
-function playRound() {
-   
-    playerSelection()
-    computerSelection()
-
-    if (playerHand == computerHand) {
-        return playerScore, computerScore;
-
-    } else if ((playerHand == list[0] && computerHand == list[2])) {
-        playerScore += 1;
-        return playerScore;
-
-    } else if ((playerHand == list[1] && computerHand == list[0])) {
-        playerScore += 1;
-        return playerScore;
-    } else if ((playerHand == list[2] && computerHand == list[1])) {
-        computerScore += 1;
-        return playerScore;
+    if (getRandomValue <= 0.33) {
+        return rock;
+    } else if (getRandomValue <= 0.66) {
+        return paper;
     } else {
-        computerScore +=1;
-        return computerScore;
+        return scissors;
+    }
+
+}
+
+function hideHands() {
+    const hands = document.getElementsByClassName('hand');
+    for (const hand of hands) {
+        hand.style.visibility = 'hidden';
     }
 }
 
-function game() {
+function showHands() {
+    const btn = document.getElementsByClassName('hand');
+    for (const hand of hands) {
+        hand.style.visibility = 'none';
+    }
+}
 
-    for (let i = 0; i < 5; i++) {
 
-        playRound()
-        console.log("Your Score: " + playerScore + " Computer Score: " + computerScore)
+function playRound(playerHand, computerHand) {
+    document.getElementById('status').innerHTML = playerHand + ' vs ' + computerHand;
+
+    switch (playerHand) {
+        case 'Rock':
+            switch (computerHand) {
+                case 'Rock':
+                    computerScore += 0;
+                    playerScore += 0;
+                    break;
+                case 'Paper':
+                    computerScore += 1;
+                    break;
+                case 'Scissors':
+                    playerScore += 1;
+            }
+            break;
+        case 'Paper':
+            switch (computerHand) {
+                case 'Rock':
+                    playerScore += 1;
+                    break;
+                case 'Paper':
+                    computerScore += 0;
+                    playerScore += 0;
+                    break;
+                case 'Scissors':
+                    computerScore += 1;
+            }
+            break;
+        case 'Scissors':
+            switch (computerHand) {
+                case 'Rock':
+                    computerScore += 1;
+                    break;
+                case 'Paper':
+                    playerScore += 1;
+                    break;
+                case 'Scissors':
+                    computerScore += 0;
+                    playerScore += 0;
+            }
     }
 
-    console.log(checkScores(playerScore, computerScore));
 }
+
+//loop trough the buttons with class tag - HAND - , on click and generate the hands
+function createScoreBoard(playerScore, computerScore) {
+
+    let Pscore = document.getElementById("playerScore");
+    let Cscore = document.getElementById("computerScore");
+    let endgametext = document.getElementById("status");
+
+    Pscore.innerHTML = "Player Score: " + playerScore;
+    Cscore.innerHTML = "Computer Score: " + computerScore
+
+    if (playerScore === 5) {
+        endgametext.innerHTML = "YOU WIN! CONGRATS!"
+        hideHands()
+    } else if (computerScore === 5) {
+        endgametext.innerHTML = "YOU LOOSE! SORRY!"
+        hideHands()
+    }
+}
+
+const btn = document.getElementsByClassName('hand');
+let playerScore = 0;
+let computerScore = 0;
+
+for (let i = 0; i < btn.length; i++) {
+    btn[i].addEventListener("click", function () {
+        let playerHand = btn[i].textContent;
+        const computerHand = computerSelection();
+        playRound(playerHand, computerHand)
+        createScoreBoard(playerScore, computerScore)
+
+    })
+
+}
+
+
+const plyAgnbtn = document.getElementById('reload');
+plyAgnbtn.addEventListener("click", function () {
+    location.reload()
+    computerScore = 0;
+    playerScore = 0;
+    showHands()
+})
+
+
+
+// This is a loop with iterate trough the tags...(button)
+/* const btn = document.querySelectorAll("button");
+btn.forEach(button => {
+
+    button.addEventListener("click", function () {
+
+        let playerHand = button.textContent;
+        const computerHand = computerSelection();
+        playRound(playerHand, computerHand)
+        document.getElementById('playerScore').innerHTML = "Player Score: " + playerScore;
+        document.getElementById('computerScore').innerHTML = "Computer Score: " +computerScore;
+
+    });
+}) */
